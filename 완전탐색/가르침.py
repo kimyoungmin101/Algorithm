@@ -1,63 +1,47 @@
-# 5개 /
-N, K = map(int, input().split())
-str_arr = []
+import sys
 
-learn_str = ['a', 'n', 't', 'i', 'c']
-notyet_learn = []
+n, k = map(int, input().split())
 
-for i in range(N):
-    A = str(input())
-    A = A[4:]
-    A = A[:-4]
-    real_str = ''
-    for i in A:
-        if i not in learn_str:
-            real_str += i
-            if i not in notyet_learn:
-                notyet_learn.append(i)
+# k 가 5보다 작으면 어떤 언어도 배울 수 없음
+if k < 5:
+    print(0)
+    exit()
+# k 가 26이면 모든 언어를 배울 수 있음
+elif k == 26:
+    print(n)
+    exit()
 
-    str_arr.append(real_str)
+answer = 0
+words = [set(sys.stdin.readline().rstrip()) for _ in range(n)]
+learn = [0] * 26
+
+# 적어도 언어 하나는 배우기위해 a,c,i,n,t 는 무조건 배워야함
+for c in ('a', 'c', 'i', 'n', 't'):
+    learn[ord(c) - ord('a')] = 1
 
 
-if K < 5:
-    print('0')
-else:
-    can_learn = K - 5
-    checked = [False for _ in range(len(notyet_learn))]
-    arr_i = [0 for _ in range(can_learn)]
-    max_result = 0
-    
-    def recur(X):
-        global max_result
+def dfs(idx, cnt):
+    global answer
 
-        if X == can_learn:
-            cnt = 0
-            str_set = sorted(arr_i, reverse=False)
-            str_set = ''.join(str_set)
-
-            for word in str_arr: # 'r' , 'hello', 'r'
-                str_second_set = sorted(word, reverse=False)
-                str_second_set = ''.join(str_second_set)
-                result_1 = set(str_set)
-                result_2 = set(str_second_set)
-                
-                result = result_2 - result_1
-                if(len(result) == 0):
-                    cnt += 1
-                
-                
-            max_result = max(max_result, cnt)
-            return
-
-        for i in range(len(notyet_learn)):
-            if checked[i] == False:
-                checked[i] = True
-                arr_i[X] = notyet_learn[i]
-                recur(X+1)
-                checked[i] = False
+    if cnt == k - 5:
+        readcnt = 0
+        for word in words:
+            check = True
+            for w in word:
+                if not learn[ord(w) - ord('a')]:
+                    check = False
+                    break
+            if check:
+                readcnt += 1
+        answer = max(answer, readcnt)
         return
 
-    recur(0)
+    for i in range(idx, 26):
+        if not learn[i]:
+            learn[i] = True
+            dfs(i, cnt + 1)
+            learn[i] = False
 
-    print(max_result)
-# str.replace('x','y') -> x를 y로 교체    
+
+dfs(0, 0)
+print(answer)
