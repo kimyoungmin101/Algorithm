@@ -23,7 +23,6 @@ for i in range(n):
             cctv.append([data[j], i, j])
 
 def fill(board, mm, x, y):
-    print(board, mm)
     for i in mm:
         nx = x
         ny = y
