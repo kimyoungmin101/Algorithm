@@ -3,7 +3,6 @@ N, M = map(int, input().split())
 checked = [False] * (N+1)
 arr = [0] * (M + 1)
 
-
 #r = m
 
 def recur(r):
