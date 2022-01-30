@@ -1,3 +1,5 @@
+import random
+
 class Node:
     def __init__(self, value):
         self.value = value
@@ -45,9 +47,8 @@ class NodeMgmt:
         searched = False
         self.current_node = self.head
         self.parent = self.head
+        
         while self.current_node:
-            if self.current_node == None:
-                break
             if self.current_node.value == value:
                 searched = True
                 break
@@ -56,6 +57,7 @@ class NodeMgmt:
                     self.parent = self.current_node
                     self.current_node = self.current_node.left
                 else:
+                    self.parent = self.current_node
                     self.current_node = self.current_node.right
         
         if searched == False:
@@ -70,10 +72,9 @@ class NodeMgmt:
                 self.parent.left = None
             else:
                 self.parent.right = None
-            del self.current_node
             
         # 삭제할 노드가 자식을 한개 가지고 있을 때 ! 왼쪽 자식이냐 오른쪽 자식이냐 갈릴 수 있음
-        if self.current_node.left != None and self.current_node.right == None: # 왼쪽 자식만 있을 경우
+        elif self.current_node.left != None and self.current_node.right == None: # 왼쪽 자식만 있을 경우
             if value < self.parent.value:
                 self.parent.left = self.current_node.left
             else:
@@ -102,13 +103,15 @@ class NodeMgmt:
                 self.change_node.right = self.current_node.right
 
         # CASE 2) 오른쪽 자식 중 가장 작은 값을 위로 올리는 경우 3-2
+        
         else:
             self.change_node = self.current_node.right
             self.change_node_parent = self.current_node.right
 
-            while self.change_node.left == None:
+            while self.change_node.left != None:
                 self.change_node_parent = self.change_node
                 self.change_node = self.change_node.left
+
             if self.change_node.right != None:
                 self.change_node_parent.left = self.change_node.right
             else:
@@ -116,13 +119,32 @@ class NodeMgmt:
             self.parent.right = self.change_node
             self.change_node.left = self.current_node.left
             self.current_node.right = self.current_node.right
-        del self.current_node
+        return True
 
-head = Node(1)
 
+
+
+bst_num = set()
+
+while len(bst_num) != 100:
+    bst_num.add(random.randint(0, 999))
+
+head = Node(500)
 BST = NodeMgmt(head)
-BST.insert(2)
-BST.insert(3)
-BST.insert(4)
+bst_num = list(bst_num)
 
-print(BST.serach(4))
+for i in bst_num:
+    BST.insert(i)
+
+delete_nums = set()
+
+for num in range(10):
+    delete_nums.add(random.randint(0, 99))
+
+
+
+for num in delete_nums:
+    if BST.delete(bst_num[num]) == False:
+        print("delete Failed", bst_num[num])
+    else:
+        print("Delete Success", bst_num[num])
