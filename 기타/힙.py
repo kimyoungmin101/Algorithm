@@ -1,10 +1,5 @@
 
 # heap 클래스 구현 
-
-from operator import le
-from turtle import left
-
-
 class heap:
     def __init__(self, data):
         self.heap_array = list()

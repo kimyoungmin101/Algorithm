@@ -103,7 +103,6 @@ class NodeMgmt:
                 self.change_node.right = self.current_node.right
 
         # CASE 2) 오른쪽 자식 중 가장 작은 값을 위로 올리는 경우 3-2
-        
         else:
             self.change_node = self.current_node.right
             self.change_node_parent = self.current_node.right
@@ -120,10 +119,7 @@ class NodeMgmt:
             self.change_node.left = self.current_node.left
             self.current_node.right = self.current_node.right
         return True
-
-
-
-
+        
 bst_num = set()
 
 while len(bst_num) != 100:
