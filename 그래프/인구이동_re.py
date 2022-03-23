@@ -65,6 +65,7 @@ while True:
     if continue_value == False:
         break
     cnt += 1
+    
     open = [[False for _ in range(N)] for _ in range(N)]
 
 print(cnt)
