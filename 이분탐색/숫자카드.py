@@ -1,5 +1,5 @@
 from sys import stdin, stdout
-
+from bisect import bisect_left
 
 def LowerBound(left, right, target):
     while left < right: # left가 right보다 작을 때 까지 while문 실행

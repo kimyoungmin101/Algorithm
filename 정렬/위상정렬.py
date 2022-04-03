@@ -10,6 +10,7 @@ for _ in range(e):
     a, b = map(int, input().split())
     graph[a].append(b)
     indegree[b] += 1
+    
 
 def topology_sort():
     result = []
@@ -18,7 +19,6 @@ def topology_sort():
     for i in range(1, v+1):
         if indegree[i] == 0:
             q.append(i)
-    
     # 진입 차수가 0인 차수부터 시작,
     while q:
         now = q.popleft() # 1
