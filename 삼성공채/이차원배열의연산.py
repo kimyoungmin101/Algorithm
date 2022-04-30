@@ -15,7 +15,7 @@ def solution(newArr): # R연산
     nxtArr = []
     
     for i in range(len(newArr)):
-        home = [[_, 101] for _ in range(100)]
+        home = [[_, 102] for _ in range(102)]
 
         value = newArr[i]
         
@@ -23,7 +23,7 @@ def solution(newArr): # R연산
             if j == 0:
                 continue
             
-            if home[j][1] == 101:
+            if home[j][1] == 102:
                 home[j][1] = 1
             else:
                 home[j][1] += 1
@@ -33,7 +33,7 @@ def solution(newArr): # R연산
         newValue = []
         
         for j in home:
-            if j[1] == 101:
+            if j[1] == 102:
                 break
             newValue.append(j[0])
             newValue.append(j[1])
@@ -56,9 +56,9 @@ def rotate(newArr):
     newArr = list(zip(*newArr[::1]))
     return newArr
 
-while cnt < 100:
+while cnt <= 101:
     
-    if len(arr) >= r-1 and len(arr[0]) >= c-1:
+    if len(arr) >= r and len(arr[0]) >= c:
         if arr[r-1][c-1] == k:
             break
     
@@ -71,7 +71,7 @@ while cnt < 100:
     
     cnt += 1
     
-if cnt >= 100:
+if cnt > 100:
     print(-1)
 else:
     print(cnt)
