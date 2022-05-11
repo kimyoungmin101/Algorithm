@@ -1,0 +1,36 @@
+'''
+10 5
+1 2 3 4 2 5 3 1 1 2
+'''
+import sys
+def solution(v):
+    answer = [0,0,0]
+    dx = [1,-1,0,0]
+    dy = [0,0,1,-1]
+    cnt_value = 0
+    
+    def dfs(X,Y):
+        if X < 0 or Y < 0 or X >= len(v) or Y >= len(v):
+            return False
+        
+        if v[X][Y] == cnt_value:
+            v[X][Y] = 10
+            
+            for i in range(4):
+                new_X = X + dx[i]
+                new_Y = Y + dy[i]
+                dfs(new_X, new_Y)
+            return True
+        
+        return False
+    
+    for i in range(len(v)):
+        for j in range(len(v)):
+            if v[i][j] != 10:
+                cnt_value = v[i][j]
+                if dfs(i,j):
+                    answer[cnt_value] += 1
+    
+v = [[0,0,1,1],[1,1,1,1],[2,2,2,1],[0,0,0,2]]
+    
+solution(v)
