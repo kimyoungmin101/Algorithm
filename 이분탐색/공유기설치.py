@@ -15,6 +15,7 @@ def router_counter(distance):
 
 house = sorted(house) #이분탐색을 위한 정렬
 start, end = 1, house[-1] - house[0] #1, 첫집과 끝집
+
 print(house, start, end)
 
 while start <= end: #이분탐색 알고리즘

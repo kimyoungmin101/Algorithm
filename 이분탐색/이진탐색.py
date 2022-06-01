@@ -6,7 +6,6 @@ N_arr = list(map(int, stdin.readline().split()))
 Q = int(stdin.readline())
 Q_arr = list(map(int, stdin.readline().split()))
 
-
 def binary(start, N_arr, end, target):
     if(start > end):
         return -1
