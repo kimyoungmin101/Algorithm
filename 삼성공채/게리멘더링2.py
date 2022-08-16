@@ -1,97 +1,80 @@
-# https://www.acmicpc.net/problem/17779
+import copy
+
+INF = 1e9
 
 
-N = int(input())
+def solve(x, y, d1, d2):
+    temp = [[0] * (n + 1) for _ in range(n + 1)]
+    # 2번 조건
+    temp[x][y] = 5
+    for i in range(1, d1 + 1):
+        temp[x + i][y - i] = 5
+    for i in range(1, d2 + 1):
+        temp[x + i][y + i] = 5
+    for i in range(1, d2 + 1):
+        temp[x + d1 + i][y - d1 + i] = 5
+    for i in range(1, d1 + 1):
+        temp[x + d2 + i][y + d2 - i] = 5
 
-dic = {}
-board = [[0 for _ in range(N)] for _ in range(N)]
-likedic = {}
-
-for i in range(N*N):
-    dic[i+1] = []
-    
-    arr = list(map(int, input().split()))
-    likedic[arr[0]] = arr[1:]
-    dx = [1,-1,0,0]
-    dy = [0,0,1,-1]
-    resultAns = 0
-    dicans = {}
-    for j in range(5):
-        dicans[j] = []
-        
-    #1) 비어있는 칸 중에서 좋아하는 학생이 인접한 칸에 가장 많은 칸으로 자리를 정한다.
-    for j in range(N):
-        for k in range(N):
-            ans = 0
-            if board[j][k] == 0:
-                for z in range(4):
-                    newX = dx[z] + j
-                    newY = dy[z] + k
-                    if newX < 0 or newY < 0 or newX >= N or newY >= N:
-                        continue
-                    if board[newX][newY] in likedic[arr[0]]:
-                        ans += 1
+    people = [0] * 5
+    # 1번 선거구
+    for r in range(1, x + d1):
+        for c in range(1, y + 1):
+            if temp[r][c] == 5:
+                break
             else:
-                continue
-            resultAns = max(ans, resultAns)
-            dicans[ans].append([j,k])
+                people[0] += maps[r][c]
 
-    if len(dicans[resultAns]) == 1:
-        X, Y = dicans[resultAns][0]
-        board[X][Y] = arr[0]
-        continue
-    
-    cntAns = dicans[resultAns]
-    # 2) 1을 만족하는 칸이 여러 개이면, 인접한 칸 중에서 비어있는 칸이 가장 많은 칸으로 자리를 정한다.
-    cnt = 0
-    diccnt = {}
-    
-    for i in range(5):
-        diccnt[i] = []
-        
-    for i in cntAns:
-        ans = 0
-        for j in range(4):
-            newX = dx[j] + i[0]
-            newY = dy[j] + i[1]
-            if newX < 0 or newY < 0 or newX >= N or newY >= N:
-                continue
-            if board[newX][newY] == 0:
-                ans += 1
-        diccnt[ans].append([i[0],i[1]])
-        cnt = max(cnt, ans)
-    
-    if len(diccnt[cnt]) == 1:
-        X, Y = diccnt[cnt][0]
-        board[X][Y] = arr[0]
-        continue
-    
-    # 3) 2를 만족하는 칸도 여러 개인 경우에는 행의 번호가 가장 작은 칸으로, 그러한 칸도 여러 개이면 열의 번호가 가장 작은 칸으로 자리를 정한다.
-    diccnt[cnt].sort()
-    X, Y = diccnt[cnt][0]
-    board[X][Y] = arr[0]
+    # 2번 선거구
+    for r in range(1, x + d2 + 1):
+        for c in range(n, y, -1):
+            if temp[r][c] == 5:
+                break
+            else:
+                people[1] += maps[r][c]
 
-total = 0
+    # 3번 선거구
+    for r in range(x + d1, n + 1):
+        for c in range(1, y - d1 + d2):
+            if temp[r][c] == 5:
+                break
+            else:
+                people[2] += maps[r][c]
 
-dx = [1,-1,0,0]
-dy = [0,0,1,-1]
+    # 4번 선거구
+    for r in range(x + d2 + 1, n + 1):
+        for c in range(n, y - d1 + d2 - 1, -1):
+            if temp[r][c] == 5:
+                break
+            else:
+                people[3] += maps[r][c]
 
-for i in range(N):
-    for j in range(N):
-        ans = 0
-        for k in range(4):
-            newX = dx[k] + i
-            newY = dy[k] + j
-            if newX < 0 or newY < 0 or newX >= N or newY >= N:
-                continue
-            
-            if board[newX][newY] in likedic[board[i][j]]:
-                
-                ans += 1
-        # 만족도는 0, 1이면 1, 2이면 10, 3이면 100, 4이면 1000
-        if ans == 0:
-            continue
-        
-        total += (10 ** (ans-1))
-        
-print(total)
+    # 5번 선거구
+    people[4] = total - sum(people)
+    return max(people) - min(people)
+
+
+if __name__ == "__main__":
+    n = int(input())
+    maps = [[0] * (n + 1)] + [[0] + list(map(int, input().split())) for _ in range(n)]
+
+    total = 0
+    for i in range(1, n + 1):
+        total += sum(maps[i])
+
+    answer = INF
+    for x in range(1, n + 1):
+        for y in range(1, n + 1):
+            for d1 in range(1, n + 1):
+                for d2 in range(1, n + 1):
+                    # 1번 조건
+                    if x + d1 + d2 > n:
+                        continue
+                    if y - d1 < 1:
+                        continue
+                    if y + d2 > n:
+                        continue
+
+                    answer = min(answer, solve(x, y, d1, d2))
+
+    print(answer)
