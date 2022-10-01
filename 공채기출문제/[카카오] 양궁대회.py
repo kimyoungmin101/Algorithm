@@ -6,11 +6,6 @@ def dfs(arr, cnt, info, n):
     global answer, remember
     
     if cnt == n:
-        if arr in set_new:
-            return
-        else:
-            set_new.append(arr.copy())
-        
         lion = 0
         apeach = 0
         
@@ -40,6 +35,6 @@ def solution(n, info):
     dfs(arr, 0, info, n)
     return remember
 
-print(solution(	5, [2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]))
+print(solution(5, [2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]))
 
 # 5, [2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0]
